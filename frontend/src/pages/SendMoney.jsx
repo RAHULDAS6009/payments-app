@@ -10,7 +10,7 @@ export const SendMoney = () => {
           <div className="text-xl font-bold pl-4 pt-2"> Friend's Name </div>
         </div>
         <div className="text-xs font-medium -mt-2 ml-1.5">Amount (in Rs)</div>
-        <input className="w-full border rounded px-2 h-10" placeholder="Enter amount..." type="text" />
+        <input className="w-full border rounded px-2 h-10" placeholder="Enter amount..." type="number" />
       <button className="bg-green-400 hover:bg-green-500 rounded-lg w-full h-10 text-white font-bold">Initiate transfer</button>
       </div>
     </div>

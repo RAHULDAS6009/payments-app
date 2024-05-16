@@ -63,14 +63,14 @@ export const Signup = () => {
         <Button
           label={"Sign Up"}
           onClick={async() => {
-            await axios.post("http:localhost:3000/api/v1/user/signup", {
+            const response=await axios.post("http://localhost:3000/api/v1/user/signup", {
                 firstname: firstname,
                 lastname: lastname,
                 username: username,
                 password: password,
               })
-              .then((res) => console.log(res));
-
+              localStorage.setItem("token",response.data.token);
+              // localStorage.removeItem ->when we logout
             navigate("/dashboard");
           }}
         />
