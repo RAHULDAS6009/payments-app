@@ -1,6 +1,6 @@
 export const Heading=({label})=>{
     return (
-        <div className="flex justify-center text-black font-bold text-2xl p-2">
+        <div className="flex justify-center text-black font-bold text-4xl p-6">
             {label}
         </div>
     )

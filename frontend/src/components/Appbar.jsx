@@ -1,4 +1,5 @@
 export const AppBar = ({ userlogo }) => {
+  
   return (
     <div className="flex justify-between ">
       <div className="text-2xl font-bold mt-2">Payments App</div>

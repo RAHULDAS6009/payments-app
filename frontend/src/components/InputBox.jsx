@@ -1,4 +1,4 @@
-export const InputBox = ({ label, onChange,type }) => {
+export const InputBox = ({ label, onChange,type,placeholder }) => {
   return (
     <div>
       <div className="text-black font-medium my-1.5">{label}</div>
@@ -6,6 +6,7 @@ export const InputBox = ({ label, onChange,type }) => {
         className="w-full h-8 rounded-md border border-slate-400 focus:outline-none focus:ring focus:ring-green-200"
         type={type}
         onChange={onChange}
+        placeholder={placeholder}
       />
     </div>
   );
