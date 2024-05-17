@@ -13,7 +13,6 @@ const signupSchema = zod.object({
   password: zod.string(),
 });
 
-
 router.post("/signup", async (req, res) => {
   //we are assuming user inputing the email is valid since we are not sending the otp
   const obj = signupSchema.safeParse(req.body);
@@ -42,11 +41,11 @@ router.post("/signup", async (req, res) => {
   });
 
   const userId = user._id;
-  
+
   await Account.create({
-    balance:1+Math.random()*10000,
-    userId:userId
-  })
+    balance: 1 + Math.random() * 10000,
+    userId: userId,
+  });
   const token = jwt.sign(
     {
       userId,
@@ -67,11 +66,13 @@ const signinBody = zod.object({
 router.post("/signin", async (req, res) => {
   //user sigin with credentials
   const { success } = signinBody.safeParse(req.body);
+
   if (!success) {
     return res.status(411).json({
       message: "Incorrect inputs",
     });
   }
+
   const existingUser = await User.findOne({
     username: req.body.username,
     password: req.body.password,
@@ -83,63 +84,63 @@ router.post("/signin", async (req, res) => {
     res.status(200).json({
       token: token,
     });
+  } else {
+    res.status(411).json({
+      meassge: "Error while logging in",
+    });
   }
+});
 
-  res.status(411).json({
-    meassge: "Error while logging in",
+const updatedBody = zod.object({
+  password: zod.string().optional(),
+  firstname: zod.string().optional(),
+  lastname: zod.string().optional(),
+});
+router.put("/update", authMiddleware, async (req, res) => {
+  const { success } = updatedBody.safeParse(req.body);
+  if (!success) {
+    return res.status(411).json({
+      message: "Error While updating information",
+    });
+  }
+  const updateUser = await User.updateOne({ _id: req.userId }, req.body);
+  if (updateUser) {
+    return res.status(200).json({
+      message: "Updated successfully",
+    });
+  }
+  return res.status(411).json({
+    message: "Error While updating information",
   });
 });
 
-const updatedBody=zod.object({
-  password:zod.string().optional(),
-  firstname:zod.string().optional(),
-  lastname:zod.string().optional()
-}) 
-router.put("/update",authMiddleware,async(req,res)=>{
-  const {success}=updatedBody.safeParse(req.body);
-  if(!success){
-    return res.status(411).json({
-      message:"Error While updating information"
-    })
-  }
-  const updateUser=await User.updateOne({ _id:req.userId },req.body);
-  if(updateUser){
-    return res.status(200).json({
-      message:"Updated successfully"
-    })
-  }
-  return res.status(411).json({
-    message:"Error While updating information"
-  })
-})
-
-
-router.get("/bulk",async (req,res)=>{
-  const filter=req.query.filter ||"";
+router.get("/bulk", async (req, res) => {
+  const filter = req.query.filter || "";
 
   //This code simply tells that if write something in filter it will simply filter me something from firstname
-  const users=await User.find({
-    $or:[{
-      firstname:{
-        "$regex":filter
-      }
-    },{
-      lastname:{
-        "$regex":filter
-      }
-    }]
-  })
+  const users = await User.find({
+    $or: [
+      {
+        firstname: {
+          $regex: filter,
+        },
+      },
+      {
+        lastname: {
+          $regex: filter,
+        },
+      },
+    ],
+  });
 
   res.json({
-    user:users.map(user=>({
-      username:user.username,
-      firstname:user.firstname,
-      lastname:user.lastname,
-      _id:user._id
-    }))
-  })
-
-  })
-
+    user: users.map((user) => ({
+      username: user.username,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      _id: user._id,
+    })),
+  });
+});
 
 module.exports = router;

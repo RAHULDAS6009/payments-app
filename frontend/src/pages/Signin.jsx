@@ -51,7 +51,7 @@ export const Signin=()=>{
                 console.log(res.data.token);
 
               })
-              console.log("hello")
+              localStorage.setItem("token",response.data.token);
               navigate("/dashboard")
             }}
             />
