@@ -1,5 +1,6 @@
+require('dotenv').config()
 const mongoose=require("mongoose");
-mongoose.connect("mongodb+srv://rahulnew:sSHSDwXFXJgJsQEP@cluster0.7og0t4w.mongodb.net/paytm");
+mongoose.connect(process.env.MONGO_URL);
 
 //create schema for users
 //want to know the differnce between new and without new keyword
